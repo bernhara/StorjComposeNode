@@ -1,0 +1,38 @@
+# $Id: docker-compose.yml,v 1.8 2021/12/31 13:03:48 orba6563 Exp $
+
+version: '3.5'
+
+services:
+  storagenode:
+    image: storjlabs/storagenode:latest
+    container_name: storagenode1
+    restart: unless-stopped
+    volumes:
+       - ${IDENTITY_DIR:-toto}:/app/identity/:ro
+       - ${STORAGE_DIR:-./storage_dir/config/}:/app/config/
+    expose:
+       - 28967
+    ports:
+       - "14002:14002"
+    environment:
+       - WALLET=${WALLET}
+       - EMAIL=${EMAIL}
+       - ADDRESS=${NODE_PUBLIC_ADDRESS}:${NODE_PUBLIC_TCP_PORT:-28967}
+       - STORAGE=${STORAGE:-1TB}
+    command:
+       - --log.level=${LOG_LEVEL:-info}
+
+  forward2storagenode:
+    image: alpine/socat
+    restart: unless-stopped
+    ports:
+      - "${NODE_PUBLIC_TCP_PORT}:28967"
+    command: -d tcp-listen:28967,fork,reuseaddr tcp-connect:storagenode:28967
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    command: storagenode1 watchtower --stop-timeout 300s
+    volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
