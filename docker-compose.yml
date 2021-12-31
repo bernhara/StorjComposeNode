@@ -8,7 +8,7 @@ services:
     container_name: storagenode1
     restart: unless-stopped
     volumes:
-       - ${IDENTITY_DIR:-toto}:/app/identity/:ro
+       - ${IDENTITY_DIR:?adjust .env}:/app/identity/:ro
        - ${STORAGE_DIR:-./storage_dir/config/}:/app/config/
     expose:
        - 28967
@@ -22,12 +22,19 @@ services:
     command:
        - --log.level=${LOG_LEVEL:-info}
 
-  forward2storagenode:
+  tcp-forward2storagenode:
     image: alpine/socat
     restart: unless-stopped
     ports:
       - "${NODE_PUBLIC_TCP_PORT}:28967"
-    command: -d tcp-listen:28967,fork,reuseaddr tcp-connect:storagenode:28967
+    command: -d TCP-LISTEN:28967,fork,reuseaddr TCP-CONNECT:storagenode:28967
+
+  udp-forward2storagenode:
+    image: alpine/socat
+    restart: unless-stopped
+    ports:
+      - "${NODE_PUBLIC_TCP_PORT}:28967"
+    command: -d UDP-LISTEN:28967,fork,reuseaddr UDP-SENDTO:storagenode:28967
 
   watchtower:
     image: containrrr/watchtower
