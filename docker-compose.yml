@@ -1,5 +1,3 @@
-# $Id: docker-compose.yml,v 1.8 2021/12/31 13:03:48 orba6563 Exp $
-
 version: '3.5'
 
 services:
