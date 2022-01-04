@@ -32,22 +32,12 @@ services:
       - "${NODE_PUBLIC_TCP_PORT}:28967/udp"
     command: -d UDP-LISTEN:28967,fork,reuseaddr UDP-SENDTO:storagenode:28967
 
-  watchtower:
+  watchtover:
     image: containrrr/watchtower
     container_name: watchtower
     restart: unless-stopped
-    environment:
-       - TZ=Europe/Paris
-       - WATCHTOWER_NOTIFICATIONS=email
-       - WATCHTOWER_NOTIFICATION_EMAIL_FROM=raphael.bernhard@orange.fr
-       - WATCHTOWER_NOTIFICATION_EMAIL_TO=raphael.bernhard@orange.fr
-       - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=s-ku2raph.home
-       - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=2525
-       - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_TLS_SKIP_VERIFY=True
-       - WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG=[docker watcher]storj node@t3620
-       - WATCHTOWER_POLL_INTERVAL=14400
-       - WATCHTOWER_DEBUG=true
-       - WATCHTOWER_DEBUG=300s
+    env_file:
+       - ./watchover.env
     command: storagenode1 watchtower
     volumes:
        - /var/run/docker.sock:/var/run/docker.sock
