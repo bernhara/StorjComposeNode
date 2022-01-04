@@ -45,6 +45,9 @@ services:
        - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=2525
        - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_TLS_SKIP_VERIFY=True
        - WATCHTOWER_NOTIFICATION_EMAIL_SUBJECTTAG=[docker watcher]storj node@t3620
-    command: storagenode1 watchtower --stop-timeout 300s --debug
+       - WATCHTOWER_POLL_INTERVAL=14400
+       - WATCHTOWER_DEBUG=true
+       - WATCHTOWER_DEBUG=300s
+    command: storagenode1 watchtower
     volumes:
        - /var/run/docker.sock:/var/run/docker.sock
