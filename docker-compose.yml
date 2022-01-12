@@ -26,22 +26,22 @@ services:
     image: alpine/socat
     restart: unless-stopped
     ports:
-      - "${NODE_PUBLIC_TCP_PORT}:28967/tcp"
+      - "${NODE_PUBLIC_TCP_PORT:-28967}:28967/tcp"
     command: -d TCP-LISTEN:28967,fork,reuseaddr TCP-CONNECT:storagenode:28967
 
   udp-forward2storagenode:
     image: alpine/socat
     restart: unless-stopped
     ports:
-      - "${NODE_PUBLIC_TCP_PORT}:28967/udp"
+      - "${NODE_PUBLIC_UDP_PORT:-28967}:28967/udp"
     command: -d UDP-LISTEN:28967,fork,reuseaddr UDP-SENDTO:storagenode:28967
 
   watchtover:
     image: containrrr/watchtower
-    container_name: watchtower
+    container_name: watchtower4storjnode1
     restart: unless-stopped
     env_file:
        - ./watchover.env
-    command: storagenode1 watchtower
+    command: storagenode1 watchtower4storjnode1
     volumes:
        - /var/run/docker.sock:/var/run/docker.sock
