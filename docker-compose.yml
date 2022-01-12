@@ -1,12 +1,16 @@
 version: '3.5'
 
+#
+# WARNING: ${xxx:?ttt} does not work on some docker-compose version
+#
+
 services:
   storagenode:
     image: storjlabs/storagenode:latest
     container_name: storagenode1
     restart: unless-stopped
     volumes:
-       - ${IDENTITY_DIR:?adjust .env}:/app/identity/:ro
+       - ${IDENTITY_DIR:-./identity_dir}:/app/identity/:ro
        - ${STORAGE_DIR:-./storage_dir/config/}:/app/config/
     ports:
        - "14002:14002"
