@@ -19,6 +19,7 @@ services:
        - EMAIL=${EMAIL}
        - ADDRESS=${NODE_PUBLIC_ADDRESS}:${NODE_PUBLIC_TCP_PORT:-28967}
        - STORAGE=${STORAGE:-1TB}
+       - SETUP=${SETUP:-"false"}
     command:
        - --log.level=${LOG_LEVEL:-info}
 
