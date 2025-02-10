@@ -1,5 +1,3 @@
-version: '3.5'
-
 #
 # WARNING: ${xxx:?ttt} does not work on some docker-compose version
 #
