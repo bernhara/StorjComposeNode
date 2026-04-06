@@ -36,7 +36,7 @@ services:
     command: -d UDP-LISTEN:28967,fork,reuseaddr UDP-SENDTO:storagenode:28967
 
   watchtover:
-    image: containrrr/watchtower
+    image: storjlabs/watchtower
     container_name: watchtower4storjnode1
     restart: unless-stopped
     env_file:
